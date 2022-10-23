@@ -11,9 +11,9 @@
     <div class="card my-2">
       <div class="card-body">
         <h5 class="card-title">{{news.title}}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">{{news.date}}</h6>
-        <p class="card-text">{{news.context}}</p>
-        <a href="#" class="card-link">Подробнее</a>
+        <h6 class="card-subtitle mb-2 text-muted">{{news.updated_at|date:"d.m.Y"}}</h6>
+        <p class="card-text">{{news.preamble}}</p>
+        <a href="{% url 'mainapp:news_detail' news.pk %}" class="card-link">Подробнее</a>
       </div>
     </div>
     {%endfor%}
