@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'social_django',
+
+    'authapp',
     'mainapp',
 ]
 
@@ -64,6 +68,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+
             ],
         },
     },
@@ -125,3 +132,25 @@ STATICFILES_DIR = [BASE_DIR /'static']
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+AUTH_USER_MODEL = 'authapp.User'
+LOGIN_REDIRECT_URL = 'mainapp:index'
+LOGOUT_REDIRECT_URL = 'mainapp:index'
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.vk.VKOAuth2',          # бекенд авторизации через ВКонтакте
+)
+
+
+SOCIAL_AUTH_GITHUB_KEY = '0a6a94cc8477e2851e2d'
+SOCIAL_AUTH_GITHUB_SECRET = 'b9b7ee6f5b236b66db64b8def76db52096b7ccf6'
+#social_core.backends.vk.
+SOCIAL_AUTH_VK_OAUTH2_KEY = '51481630'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'SEldMOzPGR17YdpJT9sI'

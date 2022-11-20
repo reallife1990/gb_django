@@ -1,5 +1,7 @@
 from django.db import models
 
+NULLABLE = {'blank': True, 'null': True }
+
 
 class BasicData(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создано')

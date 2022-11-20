@@ -13,6 +13,8 @@ Including another URLconf
     1. Import the includes() function: from django.urls import includes, path
     2. Add a URL to urlpatterns:  path('blog/', includes('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import RedirectView
@@ -21,6 +23,11 @@ from mainapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('mainapp/', include("mainapp.urls", namespace='mainapp')),
+    path('authapp/', include("authapp.urls", namespace='authapp')),
     path('', RedirectView.as_view(url='mainapp/')),
+    path('social_auth/', include('social_django.urls', namespace='social'))
     #path('mainapp/news/', views.NewsView.as_view()),
 ]
+
+if settings.DEBUG:
+    urlpatterns +=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
