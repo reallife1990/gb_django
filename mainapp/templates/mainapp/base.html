@@ -59,7 +59,7 @@
                     <li><a href="{% url 'mainapp:index' %}">Домашняя</a></li>
                     <li><a href="{% url 'mainapp:news' %}">Новости</a></li>
                 {% if user.is_authenticated %}
-                  <li><a href="{% url 'authapp:login' %}">Выйти</a></li>
+                  <li><a href="{% url 'authapp:logout' %}">Выйти</a></li>
                     {% else %}
                     <li><a href="{% url 'authapp:login' %}">Войти</a></li>
                 {% endif %}
@@ -127,8 +127,8 @@
     <!-- FontAwesome -->
     <script src="{% static 'js/fontawesome.all.min.js'%} "></script>
 
-
-
+{% block js %}
+{% endblock %}
 </body>
 
 </html>

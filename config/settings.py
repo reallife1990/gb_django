@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'social_django',
+    'crispy_forms',
 
     'authapp',
     'mainapp',
@@ -154,3 +155,5 @@ SOCIAL_AUTH_GITHUB_SECRET = 'b9b7ee6f5b236b66db64b8def76db52096b7ccf6'
 #social_core.backends.vk.
 SOCIAL_AUTH_VK_OAUTH2_KEY = '51481630'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'SEldMOzPGR17YdpJT9sI'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
