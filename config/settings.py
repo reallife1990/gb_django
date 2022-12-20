@@ -25,7 +25,12 @@ SECRET_KEY = 'django-insecure-p^-!$8wi%en@)$lt(rt3+iklx&1%6gzx(y4@k*#k$xh6^a_d!c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+if DEBUG:
+    INTERNAL_IPS = [
+        '127.0.0.1',
+    ]
 
 
 # Application definition
@@ -41,6 +46,7 @@ INSTALLED_APPS = [
     'social_django',
     'crispy_forms',
 
+    'debug_toolbar',
     'authapp',
     'mainapp',
 ]
@@ -53,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -157,3 +164,57 @@ SOCIAL_AUTH_VK_OAUTH2_KEY = '51481630'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'SEldMOzPGR17YdpJT9sI'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOG_FILE= BASE_DIR / "log" / "main_log.log"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers" : False,  # отключение других логеров при тру
+    "formatters": {
+        "console": {
+            "format": "[%(asctime)s] %(levelname)s %(name)s (%(lineno)d) %(message)s"
+        },
+
+    },
+
+    "handlers": {
+        "file": {
+            "level": "INFO",  # уровень
+            "class": "logging.FileHandler",
+            "filename": LOG_FILE,
+            "formatter": "console",  # то же имя что и в форматтере
+        },
+        "console_1": {
+            "class": "logging.StreamHandler",
+            "formatter": "console",
+            }
+        },
+
+    "loggers": {
+        "django": {"level": "INFO", "handlers": ["file", "console_1"]}
+            },
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        }
+    }
+}
+
+BROKER_URL = 'redis://localhost:6379/'
+RESULT_BACKEND = 'redis://localhost:6379/'
+
+
+# для глобального использования
+# EMAIL_HOST = ''
+# EMAIL_PORT = ''
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
+# EMAIL_USE_SSL = True
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = "emails-tmp"
