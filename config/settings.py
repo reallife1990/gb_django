@@ -25,7 +25,12 @@ SECRET_KEY = 'django-insecure-p^-!$8wi%en@)$lt(rt3+iklx&1%6gzx(y4@k*#k$xh6^a_d!c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+if DEBUG:
+    INTERNAL_IPS = [
+        '127.0.0.1',
+    ]
 
 
 # Application definition
@@ -37,6 +42,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'social_django',
+    'crispy_forms',
+
+    'debug_toolbar',
+    'authapp',
     'mainapp',
 ]
 
@@ -48,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -55,7 +67,8 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates',
+                  ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -63,6 +76,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+
             ],
         },
     },
@@ -124,3 +140,81 @@ STATICFILES_DIR = [BASE_DIR /'static']
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+AUTH_USER_MODEL = 'authapp.User'
+LOGIN_REDIRECT_URL = 'mainapp:index'
+LOGOUT_REDIRECT_URL = 'mainapp:index'
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.vk.VKOAuth2',          # бекенд авторизации через ВКонтакте
+)
+
+
+SOCIAL_AUTH_GITHUB_KEY = '0a6a94cc8477e2851e2d'
+SOCIAL_AUTH_GITHUB_SECRET = 'b9b7ee6f5b236b66db64b8def76db52096b7ccf6'
+#social_core.backends.vk.
+SOCIAL_AUTH_VK_OAUTH2_KEY = '51481630'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'SEldMOzPGR17YdpJT9sI'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOG_FILE= BASE_DIR / "log" / "main_log.log"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers" : False,  # отключение других логеров при тру
+    "formatters": {
+        "console": {
+            "format": "[%(asctime)s] %(levelname)s %(name)s (%(lineno)d) %(message)s"
+        },
+
+    },
+
+    "handlers": {
+        "file": {
+            "level": "INFO",  # уровень
+            "class": "logging.FileHandler",
+            "filename": LOG_FILE,
+            "formatter": "console",  # то же имя что и в форматтере
+        },
+        "console_1": {
+            "class": "logging.StreamHandler",
+            "formatter": "console",
+            }
+        },
+
+    "loggers": {
+        "django": {"level": "INFO", "handlers": ["file", "console_1"]}
+            },
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        }
+    }
+}
+
+BROKER_URL = 'redis://localhost:6379/'
+RESULT_BACKEND = 'redis://localhost:6379/'
+
+
+# для глобального использования
+# EMAIL_HOST = ''
+# EMAIL_PORT = ''
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
+# EMAIL_USE_SSL = True
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = "emails-tmp"
